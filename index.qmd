@@ -1,0 +1,40 @@
+---
+title: "Coca_Cola_Final_Project"
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(tidycensus)
+library(leaflet)
+
+dallas_bachelors <- read_rds("data/dallas.rds")
+
+
+pal <- colorNumeric(
+  palette = "magma",
+  domain = dallas_bachelors$estimate)
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = dallas_bachelors,
+              color = ~pal(estimate),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~estimate) %>%
+  addLegend(position = "bottomright",
+            pal = pal,
+            values = dallas_bachelors$estimate,
+            title = "% with bachelor's<br/>degree")
+```
