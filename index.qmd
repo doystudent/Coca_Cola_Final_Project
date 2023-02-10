@@ -12,13 +12,14 @@ library(tidycensus)
 library(leaflet)
 
 dallas_bachelors <- read_rds("data/dallas.rds")
-
+la_bachelors <- read_rds("data/la.rds")
+boston_bachelors <- read_rds("data/boston.rds")
 
 pal <- colorNumeric(
   palette = "magma",
   domain = dallas_bachelors$estimate)
 ```
-
+Dallas Map
 
 ```{r}
 #| echo: false
@@ -38,3 +39,44 @@ leaflet() %>%
             values = dallas_bachelors$estimate,
             title = "% with bachelor's<br/>degree")
 ```
+Los Angeles Map
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = la_bachelors,
+              color = ~pal(estimate),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~estimate) %>%
+  addLegend(position = "bottomright",
+            pal = pal,
+            values = la_bachelors$estimate,
+            title = "% with bachelor's<br/>degree")
+```
+Boston Map
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = boston_bachelors,
+              color = ~pal(estimate),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~estimate) %>%
+  addLegend(position = "bottomright",
+            pal = pal,
+            values = boston_bachelors$estimate,
+            title = "% with bachelor's<br/>degree")
+```
+
